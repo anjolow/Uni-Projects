@@ -1,0 +1,80 @@
+C51 COMPILER V9.60.7.0   LAB2                                                              10/04/2024 14:40:22 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LAB2
+OBJECT MODULE PLACED IN .\Objects\lab2.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lab2.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lab2
+                    -.lst) TABS(2) OBJECT(.\Objects\lab2.obj)
+
+line level    source
+
+   1          
+   2          
+   3          
+   4          char code MEDICOES [10][10] ={
+   5            -12,  1, 32, 49, 70, 79, 89, 88,  78, 89, 
+   6            -17, -2, 30, 58, 79, 91, 83, 83,  71, 97,
+   7             -9, 18, 39, 53, 78, 87, 93, 97,  98, 100,
+   8             -7, 29, 58, 79, 91, 90, 97, 98,  99, 100,
+   9              3, 31, 59, 70, 87, 91, 96, 99, 100, 99,
+  10              8, 39, 67, 79, 84, 93, 97, 100, 98, 97,
+  11             19, 43, 70, 79, 89, 92, 93, 97,  99, 98,
+  12             27, 49, 68, 73, 84, 90, 93, 96,  97, 98,
+  13             38, 52, 71, 81, 89, 92, 94, 96,  99, 97,
+  14             43, 52, 74, 82, 87, 90, 91, 93,  94, 98};
+  15          // Lista de resultados
+  16          unsigned char AREA;
+  17          unsigned char MEDIA;    
+  18          unsigned char POS_X, POS_Y;
+  19          
+  20          void main ()
+  21          {
+  22   1        char i, j;            // auxiliares para percorrer a matriz
+  23   1        unsigned long num=0;  // auxiliares para calculo da média
+  24   1        char den=0;           // auxiliares para calculo da média
+  25   1        char lim_esq=0, lim_dir=10, lim_cima=0, lim_baixo=10;
+  26   1        
+  27   1        
+  28   1        for (i=0; i<10; i++) // percorre as linhas da matriz
+  29   1        {
+  30   2          for (j=0; j<10; j++) // percorre as colunas da matriz
+  31   2          {
+  32   3            if (45 <= MEDICOES[i][j] &&  MEDICOES[i][j] <= 95) // verifica se o valor está dentro do intervalo requ
+             -erido
+  33   3            {
+  34   4              num = num + MEDICOES[i][j];       // soma o numerador da fração para calculo da media
+  35   4              den++;
+  36   4            }
+  37   3            else  // define os limites onde a casa não pode estar
+  38   3            { 
+  39   4              if (i<5 && i>lim_cima)        lim_cima = i;
+  40   4              else if (i>=5 && i<lim_baixo) lim_baixo = i;
+  41   4              if (j<5 && j>lim_esq)         lim_esq = j;
+  42   4              else if (j>=5 && j<lim_dir)   lim_dir = j;
+  43   4            }
+  44   3          }
+  45   2        }
+  46   1        
+  47   1        MEDIA = num/den;
+  48   1        AREA = den;
+  49   1        POS_X = (lim_esq+lim_dir)/2;
+  50   1        POS_Y = (lim_cima+lim_baixo)/2;
+  51   1        
+  52   1        while (1);
+  53   1      }
+C51 COMPILER V9.60.7.0   LAB2                                                              10/04/2024 14:40:22 PAGE 2   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    352    ----
+   CONSTANT SIZE    =    100    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
