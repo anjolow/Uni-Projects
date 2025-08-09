@@ -1,0 +1,8 @@
+Posição do jogador: 2, 2
+Posição do ninja 1: 3, 33
+Posição do ninja 2: 3, 54
+Posição do ninja 3: 12, 45
+Posição do ninja 4: 13, 17
+Posição do ninja 5: 15, 33
+Posição do ninja 6: 21, 9
+Posição do ninja 7: 21, 37
