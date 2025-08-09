@@ -1,0 +1,136 @@
+A51 MACRO ASSEMBLER  LAB1                                                                 09/26/2024 23:23:01 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\lab1.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE lab1.a51 SET(SMALL) DEBUG PRINT(.\Listings\lab1.lst) OBJECT(.\Objects\l
+                      ab1.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; Desenvolva um código em Assembly para família MCS51 que leia uma lista de  
+                       2     ; oito números e informe no registrador R1 qual o maior número da lista, no registrador R0 
+                       3     ; qual o menor valor e no registrador R2 a quantidade de valores da lista que são números 
+                       4     ; primos*.  
+                       5     ; Usar como base o exemplo abaixo 
+                       6     ; // Aponta para inicio da  lista 
+                       7     ; MOV DPTR, #LISTA 
+                       8     ; //Move para A índice da lista  
+                       9     ; MOV A, #0 
+                      10     ; // Le valor 
+                      11     ; MOVC A, @A+DPTR  
+                      12     ; // Seu código … 
+                      13     ; LISTA: 
+                      14     ; DB 23, 8, 10, 68, 31, 17, 9, 36 
+                      15     ; END
+                      16     
+0000 900051           17     MOV DPTR, #LISTA   ; Aponta para o início da lista
+0003 7A00             18     MOV R2, #0       ; Inicializa R2 para contar os números primos
+0005 7B00             19     MOV R3, #0               ; Inicializa R3 para ser o registrador auxiliar
+0007 7E07             20     MOV R6, #7       ; Número de elementos na lista (8)
+                      21     
+0009 EE               22     MOV A, R6               ; Inicializa o índice (A) para acessar a lista
+000A 93               23     MOVC A, @A+DPTR         ; Move o valor da lista (A + DPTR) para o acumulador A
+000B F8               24     MOV R0, A                       ; Inicializa o primeiro número da lista como maior
+000C F9               25     MOV R1, A                       ; Inicializa o primeiro número da lista como menor
+                      26     
+000D                  27     LOOP:
+000D C3               28             CLR C
+000E EE               29             MOV A, R6         ; Inicializa o índice (A) para acessar a lista
+000F 93               30         MOVC A, @A+DPTR   ; Move o valor da lista (A + DPTR) para o acumulador A
+0010 FB               31             MOV R3, A                               ; Utiliza R3 para guardar o número da lista
+                              que estamos analisando neste loop
+0011 8BF0             32             MOV B, R3                               ; Move R3 para B
+0013 E9               33         MOV A, R1                           ; Move o valor de R1 para A
+0014 B5F000           34         CJNE A, B, CHECK_MAX        ; Se A != R1, verifica o maior valor
+                      35     
+0017                  36     CHECK_MAX:
+0017 95F0             37             SUBB A, B               ; Subtrati o número atual que estamos analisando do maior
+0019 4002             38             JC MAX                  ; Caso o número atual for maior, vai para MAX
+001B 5004             39         JNC CHECK_MIN       ; Se R3 < R1, pula para verificar o mínimo
+                      40     
+001D                  41     MAX:
+001D EB               42             MOV A, R3               ; Registra o número atual como maior
+001E F9               43             MOV R1, A
+001F 800D             44             JMP CHECK_PRIME ; Vai verificar se o número é primo
+                      45     
+0021                  46     CHECK_MIN:
+0021 EB               47             MOV A, R3               ; Faz as atribuições necessárias
+0022 88F0             48             MOV B, R0
+0024 95F0             49             SUBB A, B               ; Subtrai o número que estamos analisando do menor
+0026 4002             50             JC MIN                  ; Caso o número atual for menor, vai para MIN
+0028 5004             51             JNC CHECK_PRIME ; Caso não, vai checar se o número atual é primo
+                      52     
+002A                  53     MIN:
+002A EB               54             MOV A, R3               ; Registra o número atual como menor
+002B F8               55             MOV R0, A
+002C 8000             56             JMP CHECK_PRIME ; Vai checar se o número atual é primo
+A51 MACRO ASSEMBLER  LAB1                                                                 09/26/2024 23:23:01 PAGE     2
+
+                      57             
+002E                  58     CHECK_PRIME:
+002E EB               59             MOV A, R3
+002F FD               60             MOV R5, A               ; Coloca o número atual em R5
+0030 1D               61             DEC R5          ; Decrementa R5
+0031 B40102           62             CJNE A, #1, DIV_LOOP ; Se não for 1, verifica se é primo
+0034 8010             63         SJMP NOT_PRIME      ; 1 não é primo
+                      64     
+0036                  65     DIV_LOOP:
+0036 8DF0             66             MOV B, R5               ; Move o divisor para B
+0038 EB               67         MOV A, R3           ; Move o número a ser verificado para A
+0039 84               68         DIV AB          ; A = R3 (número atual a ser verificado) / R5 (possíveis divisores)
+003A E5F0             69             MOV A, B
+003C 6008             70             JZ NOT_PRIME   ; Se o resto é zero, não é primo
+003E 1D               71             DEC R5          ; Decrementa R5
+003F ED               72             MOV A, R5
+0040 B401F3           73         CJNE A, #1, DIV_LOOP        ; Faz a verificação até o divisor ser 1. Caso seja e passe 
+                             daqui, o número é primo
+                      74     
+                      75         ; Se chegou aqui, o número é primo
+0043 0A               76         INC R2          ; Incrementa R2
+0044 8002             77             JMP NEXT        ; Vai verificar o próximo número
+                      78     
+0046                  79     NOT_PRIME:
+0046 8000             80         JMP NEXT    ; Vai verificar o próximo núemro
+                      81     
+0048                  82     NEXT:
+0048 1E               83         DEC R6              ; Decrementa o contador e repete o loop para os 8 números
+0049 EE               84             MOV A, R6       ; Move o valor atual para A
+004A 04               85             INC A           ; Increenta A. Se chegar em 0, a lista acabou
+004B 6002             86             JZ FIM          ; Se acabou a lista, vai para o FIM
+004D 80BE             87             JMP LOOP        ; Se não, recomça o loop
+                      88     
+004F                  89     FIM:                    ; Loop final para travar o programa
+004F 80FE             90             JMP FIM
+                      91     
+0051                  92     LISTA:
+0051 17080A44         93         DB 23, 8, 10, 68, 31, 17, 9, 36
+0055 1F110924                
+                      94                     
+                      95     END
+A51 MACRO ASSEMBLER  LAB1                                                                 09/26/2024 23:23:01 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+B. . . . . . . . .  D ADDR   00F0H   A   
+CHECK_MAX. . . . .  C ADDR   0017H   A   
+CHECK_MIN. . . . .  C ADDR   0021H   A   
+CHECK_PRIME. . . .  C ADDR   002EH   A   
+DIV_LOOP . . . . .  C ADDR   0036H   A   
+FIM. . . . . . . .  C ADDR   004FH   A   
+LISTA. . . . . . .  C ADDR   0051H   A   
+LOOP . . . . . . .  C ADDR   000DH   A   
+MAX. . . . . . . .  C ADDR   001DH   A   
+MIN. . . . . . . .  C ADDR   002AH   A   
+NEXT . . . . . . .  C ADDR   0048H   A   
+NOT_PRIME. . . . .  C ADDR   0046H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
