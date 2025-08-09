@@ -1,0 +1,863 @@
+
+
+Microchip MPLAB XC8 Assembler V2.36 build 20220127204148 
+                                                                                               Fri Oct 25 19:56:35 2024
+
+Microchip MPLAB XC8 C Compiler v2.36 (Free license) build 20220127204148 Og1 
+     1                           	processor	16F628A
+     2                           	pagewidth 120
+     3                           	opt	flic
+     4                           	psect	cinit,global,class=CODE,merge=1,delta=2
+     5                           	psect	bssBANK0,global,class=BANK0,space=1,delta=1,noexec
+     6                           	psect	cstackCOMMON,global,class=COMMON,space=1,delta=1,noexec
+     7                           	psect	cstackBANK0,global,class=BANK0,space=1,delta=1,noexec
+     8                           	psect	maintext,global,class=CODE,split=1,delta=2
+     9                           	psect	text1,local,class=CODE,merge=1,delta=2
+    10                           	psect	text2,local,class=CODE,merge=1,delta=2
+    11                           	psect	intentry,global,class=CODE,delta=2
+    12                           	psect	config,global,abs,ovrld,class=CONFIG,space=4,delta=2,noexec
+    13                           	dabs	1,0x7E,2
+    14  0000                     
+    15                           ; Generated 12/10/2023 GMT
+    16                           ; 
+    17                           ; Copyright © 2023, Microchip Technology Inc. and its subsidiaries ("Microchip")
+    18                           ; All rights reserved.
+    19                           ; 
+    20                           ; This software is developed by Microchip Technology Inc. and its subsidiaries ("Microch
+      +                          ip").
+    21                           ; 
+    22                           ; Redistribution and use in source and binary forms, with or without modification, are
+    23                           ; permitted provided that the following conditions are met:
+    24                           ; 
+    25                           ;     1. Redistributions of source code must retain the above copyright notice, this lis
+      +                          t of
+    26                           ;        conditions and the following disclaimer.
+    27                           ; 
+    28                           ;     2. Redistributions in binary form must reproduce the above copyright notice, this 
+      +                          list
+    29                           ;        of conditions and the following disclaimer in the documentation and/or other
+    30                           ;        materials provided with the distribution. Publication is not required when
+    31                           ;        this file is used in an embedded application.
+    32                           ; 
+    33                           ;     3. Microchip's name may not be used to endorse or promote products derived from th
+      +                          is
+    34                           ;        software without specific prior written permission.
+    35                           ; 
+    36                           ; THIS SOFTWARE IS PROVIDED BY MICROCHIP "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    37                           ; INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS F
+      +                          OR
+    38                           ; PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL MICROCHIP BE LIABLE FOR ANY DIRECT, INDIREC
+      +                          T,
+    39                           ; INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO
+    40                           ; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA OR PROFITS; OR BUSINESS
+    41                           ; INTERRUPTION) HOWSOEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, ST
+      +                          RICT
+    42                           ; LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE U
+      +                          SE OF
+    43                           ; THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    44                           ; 
+    45                           ; 
+    46                           ; Code-generator required, PIC16F628A Definitions
+    47                           ; 
+    48                           ; SFR Addresses
+    49  0000                     	;# 
+    50  0001                     	;# 
+    51  0002                     	;# 
+    52  0003                     	;# 
+    53  0004                     	;# 
+    54  0005                     	;# 
+    55  0006                     	;# 
+    56  000A                     	;# 
+    57  000B                     	;# 
+    58  000C                     	;# 
+    59  000E                     	;# 
+    60  000E                     	;# 
+    61  000F                     	;# 
+    62  0010                     	;# 
+    63  0011                     	;# 
+    64  0012                     	;# 
+    65  0015                     	;# 
+    66  0015                     	;# 
+    67  0016                     	;# 
+    68  0017                     	;# 
+    69  0018                     	;# 
+    70  0019                     	;# 
+    71  001A                     	;# 
+    72  001F                     	;# 
+    73  0081                     	;# 
+    74  0085                     	;# 
+    75  0086                     	;# 
+    76  008C                     	;# 
+    77  008E                     	;# 
+    78  0092                     	;# 
+    79  0098                     	;# 
+    80  0099                     	;# 
+    81  009A                     	;# 
+    82  009B                     	;# 
+    83  009C                     	;# 
+    84  009D                     	;# 
+    85  009F                     	;# 
+    86  0000                     	;# 
+    87  0001                     	;# 
+    88  0002                     	;# 
+    89  0003                     	;# 
+    90  0004                     	;# 
+    91  0005                     	;# 
+    92  0006                     	;# 
+    93  000A                     	;# 
+    94  000B                     	;# 
+    95  000C                     	;# 
+    96  000E                     	;# 
+    97  000E                     	;# 
+    98  000F                     	;# 
+    99  0010                     	;# 
+   100  0011                     	;# 
+   101  0012                     	;# 
+   102  0015                     	;# 
+   103  0015                     	;# 
+   104  0016                     	;# 
+   105  0017                     	;# 
+   106  0018                     	;# 
+   107  0019                     	;# 
+   108  001A                     	;# 
+   109  001F                     	;# 
+   110  0081                     	;# 
+   111  0085                     	;# 
+   112  0086                     	;# 
+   113  008C                     	;# 
+   114  008E                     	;# 
+   115  0092                     	;# 
+   116  0098                     	;# 
+   117  0099                     	;# 
+   118  009A                     	;# 
+   119  009B                     	;# 
+   120  009C                     	;# 
+   121  009D                     	;# 
+   122  009F                     	;# 
+   123  0006                     _PORTB	set	6
+   124  0005                     _PORTA	set	5
+   125  0001                     _TMR0	set	1
+   126  000B                     _INTCON	set	11
+   127  0028                     _RA0	set	40
+   128  0081                     _OPTION_REG	set	129
+   129  0085                     _TRISA	set	133
+   130  0086                     _TRISB	set	134
+   131                           
+   132                           	psect	cinit
+   133  000B                     start_initialization:	
+   134                           ; #config settings
+   135                           
+   136  000B                     __initialization:
+   137                           
+   138                           ; Clear objects allocated to BANK0
+   139  000B  1283               	bcf	3,5	;RP0=0, select bank0
+   140  000C  1303               	bcf	3,6	;RP1=0, select bank0
+   141  000D  01A3               	clrf	__pbssBANK0& (0+127)
+   142  000E                     end_of_initialization:	
+   143                           ;End of C runtime variable initialization code
+   144                           
+   145  000E                     __end_of__initialization:
+   146  000E  0183               	clrf	3
+   147  000F  2810               	ljmp	_main	;jump to C main() function
+   148                           
+   149                           	psect	bssBANK0
+   150  0023                     __pbssBANK0:
+   151  0023                     _contagens:
+   152  0023                     	ds	1
+   153                           
+   154                           	psect	cstackCOMMON
+   155  0070                     __pcstackCOMMON:
+   156  0070                     ?_ISR:
+   157  0070                     ??_ISR:	
+   158                           ; 1 bytes @ 0x0
+   159                           
+   160  0070                     ?_debounce:	
+   161                           ; 1 bytes @ 0x0
+   162                           
+   163  0070                     ?_main:	
+   164                           ; 1 bytes @ 0x0
+   165                           
+   166  0070                     debounce@d:	
+   167                           ; 1 bytes @ 0x0
+   168                           
+   169                           
+   170                           ; 1 bytes @ 0x0
+   171  0070                     	ds	3
+   172  0073                     ??_debounce:
+   173                           
+   174                           ; 1 bytes @ 0x3
+   175  0073                     	ds	1
+   176  0074                     debounce@BOUNCE:
+   177                           
+   178                           ; 1 bytes @ 0x4
+   179  0074                     	ds	1
+   180  0075                     debounce@last_key:
+   181                           
+   182                           ; 1 bytes @ 0x5
+   183  0075                     	ds	1
+   184  0076                     debounce@count:
+   185                           
+   186                           ; 1 bytes @ 0x6
+   187  0076                     	ds	1
+   188  0077                     debounce@key_now:
+   189                           
+   190                           ; 1 bytes @ 0x7
+   191  0077                     	ds	1
+   192  0078                     ??_main:
+   193                           
+   194                           ; 1 bytes @ 0x8
+   195  0078                     	ds	2
+   196                           
+   197                           	psect	cstackBANK0
+   198  0020                     __pcstackBANK0:
+   199  0020                     main@last_key:
+   200                           
+   201                           ; 1 bytes @ 0x0
+   202  0020                     	ds	1
+   203  0021                     main@config:
+   204                           
+   205                           ; 1 bytes @ 0x1
+   206  0021                     	ds	1
+   207  0022                     main@key_now:
+   208                           
+   209                           ; 1 bytes @ 0x2
+   210  0022                     	ds	1
+   211                           
+   212                           	psect	maintext
+   213  0010                     __pmaintext:	
+   214 ;;
+   215 ;;Main: autosize = 0, tempsize = 2, incstack = 0, save=0
+   216 ;;
+   217 ;; *************** function _main *****************
+   218 ;; Defined at:
+   219 ;;		line 56 in file "newfile.c"
+   220 ;; Parameters:    Size  Location     Type
+   221 ;;		None
+   222 ;; Auto vars:     Size  Location     Type
+   223 ;;  key_now         1    2[BANK0 ] unsigned char 
+   224 ;;  config          1    1[BANK0 ] unsigned char 
+   225 ;;  last_key        1    0[BANK0 ] unsigned char 
+   226 ;; Return value:  Size  Location     Type
+   227 ;;                  1    wreg      void 
+   228 ;; Registers used:
+   229 ;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+   230 ;; Tracked objects:
+   231 ;;		On entry : B00/0
+   232 ;;		On exit  : 0/0
+   233 ;;		Unchanged: 0/0
+   234 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2
+   235 ;;      Params:         0       0       0       0
+   236 ;;      Locals:         0       3       0       0
+   237 ;;      Temps:          2       0       0       0
+   238 ;;      Totals:         2       3       0       0
+   239 ;;Total ram usage:        5 bytes
+   240 ;; Hardware stack levels required when called: 2
+   241 ;; This function calls:
+   242 ;;		_debounce
+   243 ;; This function is called by:
+   244 ;;		Startup code after reset
+   245 ;; This function uses a non-reentrant model
+   246 ;;
+   247                           
+   248  0010                     _main:	
+   249                           ;psect for function _main
+   250                           
+   251  0010                     l774:	
+   252                           ;incstack = 0
+   253                           ; Regs used in _main: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+   254                           
+   255                           
+   256                           ;newfile.c: 58:  unsigned char key_now;;newfile.c: 59:  unsigned char last_key;;newfile.
+      +                          c: 60:  unsigned char config=0;
+   257  0010  1283               	bcf	3,5	;RP0=0, select bank0
+   258  0011  1303               	bcf	3,6	;RP1=0, select bank0
+   259  0012  01A1               	clrf	main@config
+   260                           
+   261                           ;newfile.c: 62:  TRISB = 0;
+   262  0013  1683               	bsf	3,5	;RP0=1, select bank1
+   263  0014  1303               	bcf	3,6	;RP1=0, select bank1
+   264  0015  0186               	clrf	6	;volatile
+   265  0016                     l776:
+   266                           
+   267                           ;newfile.c: 63:  TRISA = 0b00001110;
+   268  0016  300E               	movlw	14
+   269  0017  0085               	movwf	5	;volatile
+   270  0018                     l778:
+   271                           
+   272                           ;newfile.c: 65:     OPTION_REG = 0x05;
+   273  0018  3005               	movlw	5
+   274  0019  0081               	movwf	1	;volatile
+   275  001A                     l780:
+   276                           
+   277                           ;newfile.c: 67:     INTCON = (1 << 7) + (1 << 5);
+   278  001A  30A0               	movlw	160
+   279  001B  008B               	movwf	11	;volatile
+   280  001C                     l38:	
+   281                           ;newfile.c: 70:  while (1)
+   282                           
+   283                           
+   284                           ;newfile.c: 71:  {;newfile.c: 72:   key_now = PORTA & 0b00001110;
+   285  001C  1283               	bcf	3,5	;RP0=0, select bank0
+   286  001D  0805               	movf	5,w	;volatile
+   287  001E  390E               	andlw	14
+   288  001F  00F8               	movwf	??_main
+   289  0020  0878               	movf	??_main,w
+   290  0021  00A2               	movwf	main@key_now
+   291  0022                     l782:
+   292                           
+   293                           ;newfile.c: 75:   if (key_now != last_key)
+   294  0022  0822               	movf	main@key_now,w
+   295  0023  0620               	xorwf	main@last_key,w
+   296  0024  1903               	skipnz
+   297  0025  2827               	goto	u131
+   298  0026  2828               	goto	u130
+   299  0027                     u131:
+   300  0027  2866               	goto	l804
+   301  0028                     u130:
+   302  0028                     l784:
+   303                           
+   304                           ;newfile.c: 76:   {;newfile.c: 77:    if (!(debounce(1) & (1 << 1)))
+   305  0028  3001               	movlw	1
+   306  0029  2081               	fcall	_debounce
+   307  002A  3902               	andlw	2
+   308  002B  1D03               	btfss	3,2
+   309  002C  282E               	goto	u141
+   310  002D  282F               	goto	u140
+   311  002E                     u141:
+   312  002E  2834               	goto	l788
+   313  002F                     u140:
+   314  002F                     l786:
+   315                           
+   316                           ;newfile.c: 78:     config = 1;
+   317  002F  1283               	bcf	3,5	;RP0=0, select bank0
+   318  0030  1303               	bcf	3,6	;RP1=0, select bank0
+   319  0031  01A1               	clrf	main@config
+   320  0032  0AA1               	incf	main@config,f
+   321  0033  2866               	goto	l804
+   322  0034                     l788:
+   323  0034  3002               	movlw	2
+   324  0035  2081               	fcall	_debounce
+   325  0036  3904               	andlw	4
+   326  0037  1D03               	btfss	3,2
+   327  0038  283A               	goto	u151
+   328  0039  283B               	goto	u150
+   329  003A                     u151:
+   330  003A  2842               	goto	l792
+   331  003B                     u150:
+   332  003B                     l790:
+   333                           
+   334                           ;newfile.c: 81:                 config = 2;
+   335  003B  3002               	movlw	2
+   336  003C  00F8               	movwf	??_main
+   337  003D  0878               	movf	??_main,w
+   338  003E  1283               	bcf	3,5	;RP0=0, select bank0
+   339  003F  1303               	bcf	3,6	;RP1=0, select bank0
+   340  0040  00A1               	movwf	main@config
+   341  0041  2866               	goto	l804
+   342  0042                     l792:
+   343  0042  3003               	movlw	3
+   344  0043  2081               	fcall	_debounce
+   345  0044  3908               	andlw	8
+   346  0045  1D03               	btfss	3,2
+   347  0046  2848               	goto	u161
+   348  0047  2849               	goto	u160
+   349  0048                     u161:
+   350  0048  2850               	goto	l39
+   351  0049                     u160:
+   352  0049                     l794:
+   353                           
+   354                           ;newfile.c: 84:     config = 3;
+   355  0049  3003               	movlw	3
+   356  004A  00F8               	movwf	??_main
+   357  004B  0878               	movf	??_main,w
+   358  004C  1283               	bcf	3,5	;RP0=0, select bank0
+   359  004D  1303               	bcf	3,6	;RP1=0, select bank0
+   360  004E  00A1               	movwf	main@config
+   361  004F  2866               	goto	l804
+   362  0050                     l39:	
+   363                           ;newfile.c: 85:   }
+   364                           
+   365                           
+   366                           ;newfile.c: 88:   switch (config){
+   367  0050  2866               	goto	l804
+   368  0051                     l796:
+   369                           
+   370                           ;newfile.c: 90:                 contagens = 39;
+   371  0051  3027               	movlw	39
+   372  0052  00F8               	movwf	??_main
+   373  0053  0878               	movf	??_main,w
+   374  0054  00A3               	movwf	_contagens
+   375                           
+   376                           ;newfile.c: 91:                 PORTB = 0b00111000;
+   377  0055  3038               	movlw	56
+   378  0056  0086               	movwf	6	;volatile
+   379                           
+   380                           ;newfile.c: 92:                 break;
+   381  0057  287B               	goto	l806
+   382  0058                     l798:
+   383                           
+   384                           ;newfile.c: 94:                 contagens = 20;
+   385  0058  3014               	movlw	20
+   386  0059  00F8               	movwf	??_main
+   387  005A  0878               	movf	??_main,w
+   388  005B  00A3               	movwf	_contagens
+   389                           
+   390                           ;newfile.c: 95:                 PORTB = 0b11011101;
+   391  005C  30DD               	movlw	221
+   392  005D  0086               	movwf	6	;volatile
+   393                           
+   394                           ;newfile.c: 96:                 break;
+   395  005E  287B               	goto	l806
+   396  005F                     l800:
+   397                           
+   398                           ;newfile.c: 98:                 contagens = 13;
+   399  005F  300D               	movlw	13
+   400  0060  00F8               	movwf	??_main
+   401  0061  0878               	movf	??_main,w
+   402  0062  00A3               	movwf	_contagens
+   403                           
+   404                           ;newfile.c: 99:                 PORTB = 0b01111101;
+   405  0063  307D               	movlw	125
+   406  0064  0086               	movwf	6	;volatile
+   407                           
+   408                           ;newfile.c: 100:                 break;
+   409  0065  287B               	goto	l806
+   410  0066                     l804:
+   411  0066  1283               	bcf	3,5	;RP0=0, select bank0
+   412  0067  1303               	bcf	3,6	;RP1=0, select bank0
+   413  0068  0821               	movf	main@config,w
+   414  0069  00F8               	movwf	??_main
+   415  006A  01F9               	clrf	??_main+1
+   416                           
+   417                           ; Switch on 2 bytes has been partitioned into a top level switch of size 1, and 1 sub-sw
+      +                          itches
+   418                           ; Switch size 1, requested type "simple"
+   419                           ; Number of cases is 1, Range of values is 0 to 0
+   420                           ; switch strategies available:
+   421                           ; Name         Instructions Cycles
+   422                           ; simple_byte            4     3 (average)
+   423                           ; direct_byte            7     6 (fixed)
+   424                           ; jumptable            260     6 (fixed)
+   425                           ;	Chosen strategy is simple_byte
+   426  006B  0879               	movf	??_main+1,w
+   427  006C  3A00               	xorlw	0	; case 0
+   428  006D  1903               	skipnz
+   429  006E  2870               	goto	l844
+   430  006F  287B               	goto	l806
+   431  0070                     l844:
+   432                           
+   433                           ; Switch size 1, requested type "simple"
+   434                           ; Number of cases is 3, Range of values is 1 to 3
+   435                           ; switch strategies available:
+   436                           ; Name         Instructions Cycles
+   437                           ; simple_byte           10     6 (average)
+   438                           ; direct_byte           12     9 (fixed)
+   439                           ; jumptable            263     9 (fixed)
+   440                           ;	Chosen strategy is simple_byte
+   441  0070  0878               	movf	??_main,w
+   442  0071  3A01               	xorlw	1	; case 1
+   443  0072  1903               	skipnz
+   444  0073  2851               	goto	l796
+   445  0074  3A03               	xorlw	3	; case 2
+   446  0075  1903               	skipnz
+   447  0076  2858               	goto	l798
+   448  0077  3A01               	xorlw	1	; case 3
+   449  0078  1903               	skipnz
+   450  0079  285F               	goto	l800
+   451  007A  287B               	goto	l806
+   452  007B                     l806:
+   453                           
+   454                           ;newfile.c: 103:   last_key = key_now;
+   455  007B  0822               	movf	main@key_now,w
+   456  007C  00F8               	movwf	??_main
+   457  007D  0878               	movf	??_main,w
+   458  007E  00A0               	movwf	main@last_key
+   459  007F  281C               	goto	l38
+   460  0080  280A               	ljmp	start
+   461  0081                     __end_of_main:
+   462                           
+   463                           	psect	text1
+   464  0081                     __ptext1:	
+   465 ;; *************** function _debounce *****************
+   466 ;; Defined at:
+   467 ;;		line 29 in file "newfile.c"
+   468 ;; Parameters:    Size  Location     Type
+   469 ;;  d               1    wreg     unsigned char 
+   470 ;; Auto vars:     Size  Location     Type
+   471 ;;  d               1    0[COMMON] unsigned char 
+   472 ;;  key_now         1    7[COMMON] unsigned char 
+   473 ;;  count           1    6[COMMON] unsigned char 
+   474 ;;  last_key        1    5[COMMON] unsigned char 
+   475 ;;  BOUNCE          1    4[COMMON] unsigned char 
+   476 ;; Return value:  Size  Location     Type
+   477 ;;                  1    wreg      unsigned char 
+   478 ;; Registers used:
+   479 ;;		wreg, status,2, status,0
+   480 ;; Tracked objects:
+   481 ;;		On entry : 0/0
+   482 ;;		On exit  : 0/0
+   483 ;;		Unchanged: 0/0
+   484 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2
+   485 ;;      Params:         0       0       0       0
+   486 ;;      Locals:         4       0       0       0
+   487 ;;      Temps:          1       0       0       0
+   488 ;;      Totals:         5       0       0       0
+   489 ;;Total ram usage:        5 bytes
+   490 ;; Hardware stack levels used: 1
+   491 ;; Hardware stack levels required when called: 1
+   492 ;; This function calls:
+   493 ;;		Nothing
+   494 ;; This function is called by:
+   495 ;;		_main
+   496 ;; This function uses a non-reentrant model
+   497 ;;
+   498                           
+   499  0081                     _debounce:	
+   500                           ;psect for function _debounce
+   501                           
+   502  0081                     l744:	
+   503                           ;incstack = 0
+   504                           ; Regs used in _debounce: [wreg+status,2+status,0]
+   505                           
+   506                           
+   507                           ;newfile.c: 29: char debounce(char d);newfile.c: 30: {;newfile.c: 31:   char BOUNCE = 7;
+   508  0081  3007               	movlw	7
+   509  0082  00F3               	movwf	??_debounce
+   510  0083  0873               	movf	??_debounce,w
+   511  0084  00F4               	movwf	debounce@BOUNCE
+   512  0085                     l746:
+   513                           
+   514                           ;newfile.c: 33:   char count = 0;
+   515  0085  01F6               	clrf	debounce@count
+   516  0086                     l748:
+   517                           
+   518                           ;newfile.c: 34:   char last_key = 0;
+   519  0086  01F5               	clrf	debounce@last_key
+   520                           
+   521                           ;newfile.c: 35:   char key_now;;newfile.c: 37:   while(count<BOUNCE)
+   522  0087  289F               	goto	l760
+   523  0088                     l750:
+   524                           
+   525                           ;newfile.c: 38:   {;newfile.c: 39:     key_now = PORTA & 0x0E;
+   526  0088  1283               	bcf	3,5	;RP0=0, select bank0
+   527  0089  1303               	bcf	3,6	;RP1=0, select bank0
+   528  008A  0805               	movf	5,w	;volatile
+   529  008B  390E               	andlw	14
+   530  008C  00F3               	movwf	??_debounce
+   531  008D  0873               	movf	??_debounce,w
+   532  008E  00F7               	movwf	debounce@key_now
+   533  008F                     l752:
+   534                           
+   535                           ;newfile.c: 41:     if(last_key==key_now)
+   536  008F  0875               	movf	debounce@last_key,w
+   537  0090  0677               	xorwf	debounce@key_now,w
+   538  0091  1D03               	skipz
+   539  0092  2894               	goto	u91
+   540  0093  2895               	goto	u90
+   541  0094                     u91:
+   542  0094  289A               	goto	l756
+   543  0095                     u90:
+   544  0095                     l754:
+   545                           
+   546                           ;newfile.c: 42:     {;newfile.c: 43:      count++;
+   547  0095  3001               	movlw	1
+   548  0096  00F3               	movwf	??_debounce
+   549  0097  0873               	movf	??_debounce,w
+   550  0098  07F6               	addwf	debounce@count,f
+   551                           
+   552                           ;newfile.c: 44:     }
+   553  0099  289B               	goto	l758
+   554  009A                     l756:
+   555                           
+   556                           ;newfile.c: 46:     {;newfile.c: 47:      count=0;
+   557  009A  01F6               	clrf	debounce@count
+   558  009B                     l758:
+   559                           
+   560                           ;newfile.c: 49:     last_key = key_now;
+   561  009B  0877               	movf	debounce@key_now,w
+   562  009C  00F3               	movwf	??_debounce
+   563  009D  0873               	movf	??_debounce,w
+   564  009E  00F5               	movwf	debounce@last_key
+   565  009F                     l760:
+   566                           
+   567                           ;newfile.c: 37:   while(count<BOUNCE)
+   568  009F  0874               	movf	debounce@BOUNCE,w
+   569  00A0  0276               	subwf	debounce@count,w
+   570  00A1  1C03               	skipc
+   571  00A2  28A4               	goto	u101
+   572  00A3  28A5               	goto	u100
+   573  00A4                     u101:
+   574  00A4  2888               	goto	l750
+   575  00A5                     u100:
+   576  00A5                     l762:
+   577                           
+   578                           ;newfile.c: 52:   return key_now;
+   579  00A5  0877               	movf	debounce@key_now,w
+   580  00A6                     l33:
+   581  00A6  0008               	return
+   582  00A7                     __end_of_debounce:
+   583                           
+   584                           	psect	text2
+   585  00A7                     __ptext2:	
+   586 ;; *************** function _ISR *****************
+   587 ;; Defined at:
+   588 ;;		line 16 in file "newfile.c"
+   589 ;; Parameters:    Size  Location     Type
+   590 ;;		None
+   591 ;; Auto vars:     Size  Location     Type
+   592 ;;		None
+   593 ;; Return value:  Size  Location     Type
+   594 ;;                  1    wreg      void 
+   595 ;; Registers used:
+   596 ;;		wreg, status,2, status,0
+   597 ;; Tracked objects:
+   598 ;;		On entry : 0/0
+   599 ;;		On exit  : 0/0
+   600 ;;		Unchanged: 0/0
+   601 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2
+   602 ;;      Params:         0       0       0       0
+   603 ;;      Locals:         0       0       0       0
+   604 ;;      Temps:          3       0       0       0
+   605 ;;      Totals:         3       0       0       0
+   606 ;;Total ram usage:        3 bytes
+   607 ;; Hardware stack levels used: 1
+   608 ;; This function calls:
+   609 ;;		Nothing
+   610 ;; This function is called by:
+   611 ;;		Interrupt level 1
+   612 ;; This function uses a non-reentrant model
+   613 ;;
+   614                           
+   615  00A7                     _ISR:	
+   616                           ;psect for function _ISR
+   617                           
+   618  00A7                     i1l766:
+   619                           
+   620                           ;newfile.c: 18:     if (INTCON & (1 << 5))
+   621  00A7  1E8B               	btfss	11,5	;volatile
+   622  00A8  28AA               	goto	u11_21
+   623  00A9  28AB               	goto	u11_20
+   624  00AA                     u11_21:
+   625  00AA  28BA               	goto	i1l25
+   626  00AB                     u11_20:
+   627  00AB                     i1l768:
+   628                           
+   629                           ;newfile.c: 19:     {;newfile.c: 20:         if (INTCON & (1 << 2))
+   630  00AB  1D0B               	btfss	11,2	;volatile
+   631  00AC  28AE               	goto	u12_21
+   632  00AD  28AF               	goto	u12_20
+   633  00AE                     u12_21:
+   634  00AE  28BA               	goto	i1l25
+   635  00AF                     u12_20:
+   636  00AF                     i1l770:
+   637                           
+   638                           ;newfile.c: 21:         {;newfile.c: 22:             TMR0 = 256 - contagens;
+   639  00AF  1283               	bcf	3,5	;RP0=0, select bank0
+   640  00B0  1303               	bcf	3,6	;RP1=0, select bank0
+   641  00B1  0823               	movf	_contagens,w
+   642  00B2  3C00               	sublw	0
+   643  00B3  0081               	movwf	1	;volatile
+   644                           
+   645                           ;newfile.c: 23:             INTCON &= ~(1 << 2);
+   646  00B4  30FB               	movlw	251
+   647  00B5  00F0               	movwf	??_ISR
+   648  00B6  0870               	movf	??_ISR,w
+   649  00B7  058B               	andwf	11,f	;volatile
+   650  00B8                     i1l772:
+   651                           
+   652                           ;newfile.c: 24:             RA0 = !RA0;
+   653  00B8  3001               	movlw	1
+   654  00B9  0685               	xorwf	5,f
+   655  00BA                     i1l25:
+   656  00BA  0872               	movf	??_ISR+2,w
+   657  00BB  008A               	movwf	10
+   658  00BC  0E71               	swapf	??_ISR+1,w
+   659  00BD  0083               	movwf	3
+   660  00BE  0EFE               	swapf	btemp,f
+   661  00BF  0E7E               	swapf	btemp,w
+   662  00C0  0009               	retfie
+   663  00C1                     __end_of_ISR:
+   664  007E                     btemp	set	126	;btemp
+   665  007E                     wtemp0	set	126
+   666                           
+   667                           	psect	intentry
+   668  0004                     __pintentry:	
+   669                           ;incstack = 0
+   670                           ; Regs used in _ISR: [wreg+status,2+status,0]
+   671                           
+   672  0004                     interrupt_function:
+   673  007E                     saved_w	set	btemp
+   674  0004  00FE               	movwf	btemp
+   675  0005  0E03               	swapf	3,w
+   676  0006  00F1               	movwf	??_ISR+1
+   677  0007  080A               	movf	10,w
+   678  0008  00F2               	movwf	??_ISR+2
+   679  0009  28A7               	ljmp	_ISR
+   680                           
+   681                           	psect	config
+   682                           
+   683                           ;Config register CONFIG @ 0x2007
+   684                           ;	Oscillator Selection bits
+   685                           ;	FOSC = HS, HS oscillator: High-speed crystal/resonator on RA6/OSC2/CLKOUT and RA7/OSC1
+      +                          /CLKIN
+   686                           ;	Watchdog Timer Enable bit
+   687                           ;	WDTE = OFF, WDT disabled
+   688                           ;	Power-up Timer Enable bit
+   689                           ;	PWRTE = OFF, PWRT disabled
+   690                           ;	RA5/MCLR/VPP Pin Function Select bit
+   691                           ;	MCLRE = ON, RA5/MCLR/VPP pin function is MCLR
+   692                           ;	Brown-out Detect Enable bit
+   693                           ;	BOREN = ON, BOD enabled
+   694                           ;	Low-Voltage Programming Enable bit
+   695                           ;	LVP = ON, RB4/PGM pin has PGM function, low-voltage programming enabled
+   696                           ;	Data EE Memory Code Protection bit
+   697                           ;	CPD = OFF, Data memory code protection off
+   698                           ;	Flash Program Memory Code Protection bit
+   699                           ;	CP = OFF, Code protection off
+   700  2007                     	org	8199
+   701  2007  3FEA               	dw	16362
+
+Data Sizes:
+    Strings     0
+    Constant    0
+    Data        0
+    BSS         1
+    Persistent  0
+    Stack       0
+
+Auto Spaces:
+    Space          Size  Autos    Used
+    COMMON           14     10      10
+    BANK0            80      3       4
+    BANK1            80      0       0
+    BANK2            48      0       0
+
+Pointer List with Targets:
+
+    None.
+
+Critical Paths under _main in COMMON
+
+    _main->_debounce
+
+Critical Paths under _ISR in COMMON
+
+    None.
+
+Critical Paths under _main in BANK0
+
+    None.
+
+Critical Paths under _ISR in BANK0
+
+    None.
+
+Critical Paths under _main in BANK1
+
+    None.
+
+Critical Paths under _ISR in BANK1
+
+    None.
+
+Critical Paths under _main in BANK2
+
+    None.
+
+Critical Paths under _ISR in BANK2
+
+    None.
+
+Call Graph Tables:
+
+ ---------------------------------------------------------------------------------
+ (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+ ---------------------------------------------------------------------------------
+ (0) _main                                                 5     5      0     233
+                                              8 COMMON     2     2      0
+                                              0 BANK0      3     3      0
+                           _debounce
+ ---------------------------------------------------------------------------------
+ (1) _debounce                                             6     6      0     139
+                                              3 COMMON     5     5      0
+ ---------------------------------------------------------------------------------
+ Estimated maximum stack depth 1
+ ---------------------------------------------------------------------------------
+ (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+ ---------------------------------------------------------------------------------
+ (2) _ISR                                                  3     3      0       0
+                                              0 COMMON     3     3      0
+ ---------------------------------------------------------------------------------
+ Estimated maximum stack depth 2
+ ---------------------------------------------------------------------------------
+
+ Call Graph Graphs:
+
+ _main (ROOT)
+   _debounce
+
+ _ISR (ROOT)
+
+ Address spaces:
+Name               Size   Autos  Total    Cost      Usage
+BITCOMMON            E      0       0       0        0.0%
+EEDATA              80      0       0       0        0.0%
+NULL                 0      0       0       0        0.0%
+CODE                 0      0       0       0        0.0%
+COMMON               E      A       A       1       71.4%
+BITSFR0              0      0       0       1        0.0%
+SFR0                 0      0       0       1        0.0%
+BITSFR1              0      0       0       2        0.0%
+SFR1                 0      0       0       2        0.0%
+STACK                0      0       0       2        0.0%
+BANK0               50      3       4       3        5.0%
+BITSFR3              0      0       0       4        0.0%
+SFR3                 0      0       0       4        0.0%
+ABS                  0      0       E       4        0.0%
+BITBANK0            50      0       0       5        0.0%
+BITSFR2              0      0       0       5        0.0%
+SFR2                 0      0       0       5        0.0%
+BITBANK1            50      0       0       6        0.0%
+BANK1               50      0       0       7        0.0%
+BITBANK2            30      0       0       8        0.0%
+BANK2               30      0       0       9        0.0%
+DATA                 0      0       E      10        0.0%
+
+
+Microchip Technology PIC Macro Assembler V2.36 build 20220127204148 
+Symbol Table                                                                                   Fri Oct 25 19:56:35 2024
+
+                     l33 00A6                       l38 001C                       l39 0050  
+                     u90 0095                       u91 0094                      l800 005F  
+                    l804 0066                      l750 0088                      l806 007B  
+                    l752 008F                      l760 009F                      l744 0081  
+                    l762 00A5                      l754 0095                      l746 0085  
+                    l756 009A                      l748 0086                      l844 0070  
+                    l780 001A                      l758 009B                      l790 003B  
+                    l782 0022                      l774 0010                      l792 0042  
+                    l784 0028                      l776 0016                      l794 0049  
+                    l786 002F                      l778 0018                      l796 0051  
+                    l788 0034                      l798 0058                      _RA0 0028  
+                    u100 00A5                      u101 00A4                      u130 0028  
+                    u131 0027                      u140 002F                      u141 002E  
+                    u150 003B                      u151 003A                      u160 0049  
+                    u161 0048                      _ISR 00A7                     ?_ISR 0070  
+                   i1l25 00BA                     _TMR0 0001              main@key_now 0022  
+                   _main 0010                     btemp 007E                     start 000A  
+                  ??_ISR 0070                    ?_main 0070                    i1l770 00AF  
+                  i1l772 00B8                    i1l766 00A7                    i1l768 00AB  
+                  u11_20 00AB                    u11_21 00AA                    u12_20 00AF  
+                  u12_21 00AE                    _PORTA 0005                    _PORTB 0006  
+           main@last_key 0020                    _TRISA 0085                    _TRISB 0086  
+                  pclath 000A                    status 0003                    wtemp0 007E  
+        __initialization 000B             __end_of_main 0081                   ??_main 0078  
+                 _INTCON 000B         __end_of_debounce 00A7                   saved_w 007E  
+__end_of__initialization 000E           __pcstackCOMMON 0070               __pbssBANK0 0023  
+             __pmaintext 0010               __pintentry 0004                ?_debounce 0070  
+                __ptext1 0081                  __ptext2 00A7               ??_debounce 0073  
+          debounce@count 0076     end_of_initialization 000E         debounce@last_key 0075  
+             main@config 0021      start_initialization 000B              __end_of_ISR 00C1  
+              ___latbits 0000            __pcstackBANK0 0020                _contagens 0023  
+              debounce@d 0070        interrupt_function 0004          debounce@key_now 0077  
+               _debounce 0081           debounce@BOUNCE 0074                 intlevel1 0000  
+             _OPTION_REG 0081  

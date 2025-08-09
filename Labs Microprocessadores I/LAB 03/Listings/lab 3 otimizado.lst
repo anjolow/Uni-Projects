@@ -1,0 +1,239 @@
+C51 COMPILER V9.60.7.0   LAB_3_OTIMIZADO                                                   10/14/2024 15:01:21 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LAB_3_OTIMIZADO
+OBJECT MODULE PLACED IN .\Objects\lab 3 otimizado.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lab 3 otimizado.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\lab 3 otimizado.lst) TABS(2) OBJECT(.\Objects\lab 3 otimizado.obj)
+
+line level    source
+
+   1          // Código desenvolvido pela dupla: Lucas Anjos e Patrick R. Lodi
+   2          
+   3          
+   4          char code MEDICOES [10][10] ={
+   5              47, 49, 63, 79, 84, 84, 93, 0,  -3, -8,
+   6              49, 65, 70, 82, 84, 89, 92, 0,  -7, -9,
+   7              57, 71, 72, 84, 87, 89, 93, 94,  0, -2,
+   8              69, 72, 78, 83, 85, 86, 87, 91, 94,  0,
+   9              65, 71, 74, 81, 79, 83, 82, 89, 93, 94,
+  10              64, 70, 73, 72, 76, 75, 83, 89, 91, 96,
+  11              54, 63, 65, 68, 73, 81, 82, 87, 96, 97,
+  12              49, 52, 62, 61, 71, 78, 79, 84, 93, 94,
+  13               0, 49, 54, 67, 70, 79, 81, 89, 91, 92,
+  14              -7,  0, 49, 63, 67, 74, 81, 87, 92, 91};
+  15          
+  16          // Lista de resultados
+  17          unsigned char AREA;
+  18          unsigned char NDVI;   
+  19          unsigned char POS_X, POS_Y;
+  20          
+  21          #include <reg51.h>
+  22          
+  23          //Inicializa as constantes RS e E nas portas as quais o LCD esta ligado
+  24          sbit RS = P3^6;
+  25          sbit E = P3^7;
+  26              
+  27          void inicializa_timer()
+  28          {
+  29   1        TMOD = 2;   // Habilita timer() como temporizador de 8 bits
+  30   1        TL0 = 0;  // Valor inicial para 256 contagens
+  31   1        TH0 = 0;  // Valor inicial para 256 contagens
+  32   1        TF0 = 0;    // Zera a sinalizacao de estouro
+  33   1        TR0 = 1;    // Liga timer()
+  34   1      } 
+  35          
+  36            
+  37          void atraso_lcd()
+  38          {
+  39   1        TL0 = 182;    // Valor inicial para 77 contagens
+  40   1        TH0 = 182;    // Valor inicial para 77 contagens
+  41   1        TF0 = 0;      // Zera a sinalizacao de estouro
+  42   1        while(!TF0);  // Aguarda estouro do timer
+  43   1      }
+  44          
+  45          
+  46          void escreve_dado(char dado)
+  47          {
+  48   1        RS=1;                 // Habilita a funcao de escrita no LCD
+  49   1        P1 &= 0x0F;           // Limpa porta 1
+  50   1        P1 |= (dado & 0xF0);  // Verifica o proximo pino a ser preenchido
+  51   1        E=1;                  // Sobre e desce o enable para realizar a escrita
+  52   1        E=0;
+  53   1        P1 &= 0x0F;           // Limpa porta 1
+  54   1        P1 |= (dado << 4);    // Esreve o dado nos pinos ainda nao preenchido da porta 1
+C51 COMPILER V9.60.7.0   LAB_3_OTIMIZADO                                                   10/14/2024 15:01:21 PAGE 2   
+
+  55   1        E=1;                  // Sobre e desce o enable para realizar a escrita
+  56   1        E=0;
+  57   1        atraso_lcd();         // Chama o atraso para tudo ocorrer corretamente
+  58   1      }
+  59          
+  60          
+  61          void escreve_comando(char dado)
+  62          {
+  63   1        RS=0;                 // Habilita a funcao de comando no LCD
+  64   1        P1 &= 0x0F;           // Limpa 4 bits superiores da porta 1
+  65   1        P1 |= (dado & 0xF0);  // Ativa bits na parte alta do comando
+  66   1        E=1;                  // Sobre e desce o enable para realizar a escrita
+  67   1        E=0;
+  68   1        P1 &= 0x0F;           // Limpa 4 bits superiores da porta 1
+  69   1        P1 |= (dado << 4);    // Ativa bits na parte baixa do comando
+  70   1        E=1;                  // Sobre e desce o enable para realizar a escrita
+  71   1        E=0;
+  72   1        atraso_lcd();         // Chama o atraso para tudo ocorrer corretamente
+  73   1      }
+  74          
+  75          
+  76          // Funcao para limpar o LCD
+  77          void limpa_lcd()
+  78          {
+  79   1        char c;
+  80   1        escreve_comando(0x01);  //Comando para limpar o LCD
+  81   1      
+  82   1        for(c=0; c<40; c++)     //Atraso necessario para realizar o comando
+  83   1          atraso_lcd();
+  84   1      } 
+  85          
+  86          
+  87          // Funcao para inicializar o LCD
+  88          void inicializa_lcd()
+  89          {
+  90   1        // Rotina de seguranca para garantir que o LCD funcione
+  91   1        RS=0;
+  92   1        P1 &= 0x0F;
+  93   1        P1 |= (0x20 & 0xF0);
+  94   1        E=1;
+  95   1        E=0;
+  96   1        
+  97   1        // Sequencia de comandos para inicializar o LCD
+  98   1        atraso_lcd();
+  99   1        escreve_comando(0x28); // Seta numero de linhas para 2
+ 100   1        escreve_comando(0x0C); // Liga LCD
+ 101   1        escreve_comando(0x06); // Seta a direcao de movimento do cursor para a direita (incrementa)
+ 102   1        limpa_lcd();
+ 103   1      }
+ 104          
+ 105          char converte_num(char num) // Conversão de digitos de 0 a 9 em seus correspondetes como caracteres
+ 106          {
+ 107   1        switch(num)
+ 108   1        {
+ 109   2          case 0: return num=48;
+ 110   2          case 1: return num=49;
+ 111   2          case 2: return num=50;
+ 112   2          case 3: return num=51;
+ 113   2          case 4: return num=52;
+ 114   2          case 5: return num=53;
+ 115   2          case 6: return num=54;
+ 116   2          case 7: return num=55;
+C51 COMPILER V9.60.7.0   LAB_3_OTIMIZADO                                                   10/14/2024 15:01:21 PAGE 3   
+
+ 117   2          case 8: return num=56;
+ 118   2          case 9: return num=57;
+ 119   2        }
+ 120   1      }
+ 121          
+ 122          void escreve_num(char num, char*vetor)
+ 123          {
+ 124   1        vetor[0] = converte_num(num/10);
+ 125   1        vetor[1] = converte_num(num%10);
+ 126   1        vetor[2] = 32;  // Caractere de espaço
+ 127   1      }
+ 128          
+ 129          void main ()
+ 130          {
+ 131   1        char i, j;            // auxiliares para percorrer a matriz
+ 132   1        unsigned long num=0;  // auxiliares para calculo da media
+ 133   1        char den=0;           // auxiliares para calculo da media
+ 134   1        char lim_esq=0, lim_dir=10, lim_cima=0, lim_baixo=10;
+ 135   1        char escreve[8];
+ 136   1        
+ 137   1        for (i=0; i<10; i++) // percorre as linhas da matriz
+ 138   1        {
+ 139   2          for (j=0; j<10; j++) // percorre as colunas da matriz
+ 140   2          {
+ 141   3            if (45 <= MEDICOES[i][j] &&  MEDICOES[i][j] <= 95) // verifica se o valor esta dentro do intervalo requ
+             -erido
+ 142   3            {
+ 143   4              num = num + MEDICOES[i][j];       // soma o numerador da fra??o para calculo da media
+ 144   4              den++;
+ 145   4            }
+ 146   3            else  // define os limites onde a casa n?o pode estar
+ 147   3            { 
+ 148   4              if (i<5 && i>lim_cima)        lim_cima = i;
+ 149   4              else if (i>=5 && i<lim_baixo) lim_baixo = i;
+ 150   4              if (j<5 && j>lim_esq)         lim_esq = j;
+ 151   4              else if (j>=5 && j<lim_dir)   lim_dir = j;
+ 152   4            }
+ 153   3          }
+ 154   2        }
+ 155   1        
+ 156   1        NDVI = num/den;
+ 157   1        AREA = den;
+ 158   1        POS_X = 10*(lim_esq+lim_dir)/2;
+ 159   1        POS_Y = 10*(lim_cima+lim_baixo)/2;
+ 160   1        
+ 161   1        inicializa_timer();
+ 162   1        inicializa_lcd();
+ 163   1      
+ 164   1        escreve[0] = 'A';
+ 165   1        escreve[1] = 'R';
+ 166   1        escreve[2] = 'E';
+ 167   1        escreve[3] = 'A';
+ 168   1        escreve[4] = '=';
+ 169   1        escreve_num(AREA,&escreve[5]);
+ 170   1        
+ 171   1        for(i=0;i<8;i++)
+ 172   1          escreve_dado(escreve[i]);
+ 173   1        
+ 174   1        escreve[0] = 'N';
+ 175   1        escreve[1] = 'D';
+ 176   1        escreve[2] = 'V';
+ 177   1        escreve[3] = 'I';
+C51 COMPILER V9.60.7.0   LAB_3_OTIMIZADO                                                   10/14/2024 15:01:21 PAGE 4   
+
+ 178   1        escreve[4] = '=';
+ 179   1        escreve_num(NDVI,&escreve[5]);
+ 180   1        
+ 181   1        for(i=0;i<8;i++)
+ 182   1          escreve_dado(escreve[i]);
+ 183   1      
+ 184   1        escreve_comando(0xC0); // Coloca cursor na segunda linha
+ 185   1      
+ 186   1        escreve[0] = 'P';
+ 187   1        escreve[1] = 'O';
+ 188   1        escreve[2] = 'S';
+ 189   1        escreve[3] = 'X';
+ 190   1        escreve[4] = '=';
+ 191   1        escreve_num(POS_X,&escreve[5]);
+ 192   1        
+ 193   1        for(i=0;i<8;i++)
+ 194   1          escreve_dado(escreve[i]);
+ 195   1      
+ 196   1        escreve[0] = 'P';
+ 197   1        escreve[1] = 'O';
+ 198   1        escreve[2] = 'S';
+ 199   1        escreve[3] = 'Y';
+ 200   1        escreve[4] = '=';
+ 201   1        escreve_num(POS_Y,&escreve[5]);
+ 202   1        
+ 203   1        for(i=0;i<8;i++)
+ 204   1          escreve_dado(escreve[i]);
+ 205   1      
+ 206   1        while (1);
+ 207   1      }
+*** WARNING C291 IN LINE 120 OF lab 3 otimizado.c: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    762    ----
+   CONSTANT SIZE    =    100    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4      17
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
